@@ -8,7 +8,7 @@
             :probe-type="3"
             @scroll="contentScroll"
             :pull-up-load="true"
-    @pullingUp="loadMore">
+            @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <feature-view></feature-view>
@@ -77,8 +77,25 @@
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
+
+    },
+    mounted() {
+      const refresh=this.debounce(this.$refs.scroll.refresh,200)
+      //3.监听item中图片加载完成
+      this.$bus.$on("itemImageLoad", () => {
+        refresh()
+      })
     },
     methods: {
+      debounce(func, delay) {
+        let timer = null;
+        return function (...args) {
+          if (timer) clearInterval(timer)
+          timer = setTimeout(() => {
+            func.apply(this, args);
+          }, delay)
+        }
+      },
       getHomeMultidata() {
         //1.请求多个数据
         getHomeMultidata().then(res => {
@@ -125,7 +142,7 @@
           this.isShow = false;
         }
       },
-      loadMore(){
+      loadMore() {
         this.getHomeGoods(this.currentType)
       }
     }

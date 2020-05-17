@@ -28,15 +28,18 @@
     },
     methods: {
       scrollTo(x, y, time = 500) {
-        this.scroll.scrollTo(0, 0, time)
+        this.scroll &&  this.scroll.scrollTo && this.scroll.scrollTo(0, 0, time)
       },
       finishPullUp() {
-        this.scroll.finishPullUp()
+        this.scroll &&  this.scroll.finishPullUp &&this.scroll.finishPullUp()
+      },
+      refresh() {
+        console.log("------")
+        this.scroll &&  this.scroll.refresh && this.scroll.refresh()
       },
 
     },
     mounted() {
-      console.log(this.probeType)
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType, //实时监听
         pullUpLoad: this.pullUpLoad,  //监听是否滚动到最后
@@ -46,6 +49,7 @@
       this.scroll.on("scroll", (position) => { //定位当前浏览到的位置
         this.$emit('scroll',position)
       })
+      // console.log(this.scroll)
       this.scroll.on("pullingUp", () => { //上拉加载更多
         this.$emit('pullingUp')
       })

@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="goodsItem.show.img" alt="" @load="loadImg">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -19,6 +19,19 @@
           return {}
         }
       }
+    },
+    data(){
+      return{
+        num:0,
+      }
+    },
+    methods:{
+      loadImg(){
+
+          //当图片加载完 刷新scroll
+        this.$bus.$emit("itemImageLoad")
+
+      },
     }
   }
 </script>
