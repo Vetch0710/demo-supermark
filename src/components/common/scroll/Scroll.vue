@@ -28,7 +28,7 @@
     },
     methods: {
       scrollTo(x, y, time = 500) {
-        this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(0, 0, time)
+        this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
       },
       finishPullUp() {
         this.scroll && this.scroll.finishPullUp && this.scroll.finishPullUp()

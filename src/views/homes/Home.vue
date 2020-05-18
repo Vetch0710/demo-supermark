@@ -88,8 +88,8 @@
     activated() {
       console.log("aaa")
       this.$refs.scroll.refresh()
-      // this.$refs.scroll.scrollTo(0,this.saveY,0)
-      this.$refs.scroll.scroll.startY = this.saveY
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      // this.$refs.scroll.scroll.startY = this.saveY
     },
     deactivated() {
       this.saveY = this.$refs.scroll.scroll.y

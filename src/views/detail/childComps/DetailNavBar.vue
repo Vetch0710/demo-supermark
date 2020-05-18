@@ -33,6 +33,7 @@
     methods: {
       titleClick(index) {
         this.currentIndex = index;
+        this.$emit("titleClick",index)
       },
       backClick(){
         //返回上一层页面

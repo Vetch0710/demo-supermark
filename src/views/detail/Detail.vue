@@ -1,15 +1,14 @@
-
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"/>
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick"/>
     <scroll class="content" ref="scroll">
       <detail-swiper :top-images="topImages"/>
       <detail-base-info :goods="GoodsInfo"/>
       <detail-shop-info :shop="Shop"/>
       <detail-images-info :images-info="detailInfo" @imgLoad="imgLoad"/>
-      <detail-param-info :param-info="paramsInfo"/>
-      <detail-comment-info :comment-info="commentInfo"/>
-      <goods-list :goods="recommend"/>
+      <detail-param-info ref="params" :param-info="paramsInfo"/>
+      <detail-comment-info ref="comment" :comment-info="commentInfo"/>
+      <goods-list ref="recommend" :goods="recommend"/>
     </scroll>
   </div>
 </template>
@@ -32,6 +31,7 @@
 
   import {getDetail, GoodsInfo, Shop, GoodsParams, getRecommend} from "network/detail";
   import {imgListenerMixin} from "common/mixin";
+  import {debounce} from "../../common/utils";
 
 
   export default {
@@ -49,7 +49,7 @@
       Scroll
     },
     //混入
-    mixins:[imgListenerMixin],
+    mixins: [imgListenerMixin],
     data() {
       return {
         iid: null,
@@ -60,7 +60,8 @@
         paramsInfo: {},
         commentInfo: {},
         recommend: [],
-        itemImgListener:'',
+        themeTopY: [],
+        getThemeTop: null,
       }
     },
     created() {
@@ -84,22 +85,50 @@
         if (data.rate.cRate !== 0) {
           this.commentInfo = data.rate.list[0] || {};
         }
+        //当渲染完后回调函数，但是图片不一定加载完
+        // this.$nextTick(() => {
+        //   this.themeTopY = []
+        //   this.themeTopY.push(0)
+        //   this.themeTopY.push(this.$refs.params.$el.offsetTop);
+        //   this.themeTopY.push(this.$refs.comment.$el.offsetTop);
+        //   this.themeTopY.push(this.$refs.recommend.$el.offsetTop);
+        //   console.log(this.themeTopY)
+        // })
+
       })
 
       //请求推荐数据
       getRecommend().then(res => {
         this.recommend = res.data.list;
       })
+
+      this.getThemeTop=debounce(()=>{
+        this.themeTopY = []
+        this.themeTopY.push(0)
+        this.themeTopY.push(this.$refs.params.$el.offsetTop);
+        this.themeTopY.push(this.$refs.comment.$el.offsetTop);
+        this.themeTopY.push(this.$refs.recommend.$el.offsetTop);
+        console.log(this.themeTopY)
+      })
+
     },
     mounted() {
+
     },
     destroyed() {
-      this.$bus.$off('itemImageLoad',this.imgListener)
+      this.$bus.$off('itemImageLoad', this.imgListener)
     },
     methods: {
       imgLoad() {
         this.$refs.scroll.refresh();
-      }
+        this.getThemeTop()
+      },
+      titleClick(index) {
+        console.log(index)
+        console.log(-this.themeTopY[index])
+        this.$refs.scroll.scrollTo(0, -this.themeTopY[index], 100)
+        // this.$refs.scroll.scroll.startY = -this.themeTopY[index]
+      },
     }
   }
 </script>
