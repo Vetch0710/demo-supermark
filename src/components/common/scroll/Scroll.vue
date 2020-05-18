@@ -28,14 +28,14 @@
     },
     methods: {
       scrollTo(x, y, time = 500) {
-        this.scroll &&  this.scroll.scrollTo && this.scroll.scrollTo(0, 0, time)
+        this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(0, 0, time)
       },
       finishPullUp() {
-        this.scroll &&  this.scroll.finishPullUp &&this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp && this.scroll.finishPullUp()
       },
       refresh() {
         console.log("------")
-        this.scroll &&  this.scroll.refresh && this.scroll.refresh()
+        this.scroll && this.scroll.refresh && this.scroll.refresh()
       },
 
     },
@@ -46,13 +46,19 @@
         mouseWheel: true,  //是否允许鼠标滑动
         click: true
       })
-      this.scroll.on("scroll", (position) => { //定位当前浏览到的位置
-        this.$emit('scroll',position)
-      })
+      //监听滚动位置
+      if (this.probeType === 2 || this.probeType === 3) {
+        this.scroll.on("scroll", (position) => { //定位当前浏览到的位置
+          this.$emit('scroll', position)
+        })
+      }
       // console.log(this.scroll)
-      this.scroll.on("pullingUp", () => { //上拉加载更多
-        this.$emit('pullingUp')
-      })
+      //监听scroll滚动到底部
+      if (this.pullUpLoad) {
+        this.scroll.on("pullingUp", () => { //上拉加载更多
+          this.$emit('pullingUp')
+        })
+      }
     }
   }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <img :src="goodsItem.show.img" alt="" @load="loadImg">
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
@@ -12,25 +12,28 @@
 <script>
   export default {
     name: "GoodsListItem",
-    props:{
-      goodsItem:{
-        type:Object,
-        default (){
+    props: {
+      goodsItem: {
+        type: Object,
+        default() {
           return {}
         }
       }
     },
-    data(){
-      return{
-        num:0,
+    data() {
+      return {
+        num: 0,
       }
     },
-    methods:{
-      loadImg(){
+    methods: {
+      loadImg() {
 
-          //当图片加载完 刷新scroll
+        //当图片加载完 刷新scroll
         this.$bus.$emit("itemImageLoad")
 
+      },
+      itemClick() {
+        this.$router.push('/detail/'+this.goodsItem.iid)
       },
     }
   }
