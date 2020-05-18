@@ -46,6 +46,7 @@
   /* 函数方法 */
   import {getHomeMultidata, getHomeGoods} from "network/home";
   import {debounce} from "common/utils"
+  import {imgListenerMixin} from 'common/mixin'
 
   export default {
     name: "home",
@@ -62,6 +63,7 @@
       FeatureView,
 
     },
+    mixins: [imgListenerMixin],
     data() {
       return {
         banners: [],
@@ -87,11 +89,11 @@
       console.log("aaa")
       this.$refs.scroll.refresh()
       // this.$refs.scroll.scrollTo(0,this.saveY,0)
-      this.$refs.scroll.scroll.startY=this.saveY
+      this.$refs.scroll.scroll.startY = this.saveY
     },
     deactivated() {
-      this.saveY=this.$refs.scroll.scroll.y
-      console.log( this.saveY)
+      this.saveY = this.$refs.scroll.scroll.y
+      this.$bus.$off("itemImageLoad", this.imgListener)
     },
     created() {
       this.getHomeMultidata();
@@ -103,15 +105,15 @@
 
     },
     mounted() {
-      //3.监听item中图片加载完成
-      const refresh = debounce(this.$refs.scroll.refresh, 200)
-      this.$bus.$on("itemImageLoad", () => {
-        refresh()
-      })
-
-      //获取tabControl 的offsetTop
-      //所有的组件都有一个属性$el：用于获取组件中的元素
-      // console.log(this.$refs.tabControl.$el.offsetTop);
+      // //3.监听item中图片加载完成
+      // const refresh = debounce(this.$refs.scroll.refresh, 200)
+      // this.$bus.$on("itemImageLoad", () => {
+      //   refresh()
+      // })
+      //
+      // //获取tabControl 的offsetTop
+      // //所有的组件都有一个属性$el：用于获取组件中的元素
+      // // console.log(this.$refs.tabControl.$el.offsetTop);
 
     },
     methods: {
