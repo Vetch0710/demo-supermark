@@ -39,7 +39,7 @@
   import {imgListenerMixin, backTopMixin} from "common/mixin";
   import {debounce} from "../../common/utils";
 
-
+import {mapActions} from 'vuex'
   export default {
     name: "Detail",
     components: {
@@ -127,6 +127,7 @@
       this.$bus.$off('itemImageLoad', this.imgListener)
     },
     methods: {
+      ...mapActions(['addCart']),
       imgLoad() {
         this.$refs.scroll.refresh();
         this.getThemeTop()
@@ -170,7 +171,13 @@
         obj.desc = this.GoodsInfo.desc;
         obj.newPrice = this.GoodsInfo.realPrice;
         // 3.添加到Store中
-        this.$store.dispatch('addCart', obj)
+        // this.$store.dispatch('addCart', obj).then(res=>{
+        //   this.$toast(res);
+        // })
+        this.addCart(obj).then(res=>{
+            this.$toast(res);
+          })
+
       },
     }
   }
