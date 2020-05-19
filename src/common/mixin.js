@@ -1,4 +1,5 @@
 import { debounce } from "./utils";
+import BackTop from "components/content/backTop/BackTop";
 
 export const imgListenerMixin = {
   data() {
@@ -19,10 +20,14 @@ export const imgListenerMixin = {
 };
 
 export const backTopMixin = {
+  components:{
+    BackTop
+  },
   data() {
     return {
       // 当前滚动的位置
-      curPosition: 0
+      curPosition: 0,
+      isShow:false,
     };
   },
   methods: {
@@ -30,6 +35,15 @@ export const backTopMixin = {
     backTop() {
       // 调用子组件里面封装的scrollTo方法即可
       this.$refs.scroll.scrollTo(0, 0);
-    }
-  }
+    },
+    isshow(position) {
+      //返回顶部图标是否显示
+      if (-position.y > 1000) {
+        this.isShow = true;
+      } else {
+        this.isShow = false;
+      }
+    },
+  },
+
 };

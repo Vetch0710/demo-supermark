@@ -27,21 +27,21 @@ export default {
   name: "DetailBottomBar",
   data() {
     return {
-      isShouCang: false
+      isShouCang: false,
     };
   },
   computed: {
     // 对象写法可以自己命名
     ...mapGetters({
-      cartLength: "cartListLength"
+      cartLength: "cartCount"
     })
   },
   created() {
     // 每次刷新页面获取本地存储购物车数据
-    let list = JSON.parse(localStorage.getItem("cartList")) || [];
-    if (list) {
-      this.$store.commit("setCartList", list);
-    }
+    // let list = JSON.parse(localStorage.getItem("cartList")) || [];
+    // if (list) {
+    //   this.$store.commit("setCartList", list);
+    // }
   },
   methods: {
     addToCart() {

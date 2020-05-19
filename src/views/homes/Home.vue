@@ -25,7 +25,7 @@
       <goods-list :goods="showGoods"/>
     </scroll>
 
-    <back-top @click.native="backClick" v-show="isShow"/>
+    <back-top @click.native="backTop" v-show="isShow"/>
   </div>
 </template>
 
@@ -35,7 +35,7 @@
   import TabControl from "components/content/tabControl/TabControl";
   import GoodsList from "components/content/goods/GoodsList";
   import Scroll from "components/common/scroll/Scroll";
-  import BackTop from "components/content/backTop/BackTop";
+  // import BackTop from "components/content/backTop/BackTop";
 
   /* 子组件 */
   import HomeSwiper from "./childComps/HomeSwiper";
@@ -46,7 +46,7 @@
   /* 函数方法 */
   import {getHomeMultidata, getHomeGoods} from "network/home";
   import {debounce} from "common/utils"
-  import {imgListenerMixin} from 'common/mixin'
+  import {imgListenerMixin, backTopMixin} from 'common/mixin'
 
   export default {
     name: "home",
@@ -55,7 +55,7 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop,
+      // BackTop,
 
 
       HomeSwiper,
@@ -63,7 +63,7 @@
       FeatureView,
 
     },
-    mixins: [imgListenerMixin],
+    mixins: [imgListenerMixin, backTopMixin],
     data() {
       return {
         banners: [],
@@ -88,7 +88,7 @@
     activated() {
       console.log("aaa")
       this.$refs.scroll.refresh()
-      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
       // this.$refs.scroll.scroll.startY = this.saveY
     },
     deactivated() {
@@ -156,20 +156,20 @@
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },
-      backClick() {
-        // 获取ref="scroll" 里的 scroll（scroll.vue中的数据） 属性
-        // this.$refs.scroll.scroll.scrollTo(0,0,500)
-
-        this.$refs.scroll.scrollTo(0, 0, 500)
-      },
+      // backClick() {
+      //   // 获取ref="scroll" 里的 scroll（scroll.vue中的数据） 属性
+      //   // this.$refs.scroll.scroll.scrollTo(0,0,500)
+      //
+      //   this.$refs.scroll.scrollTo(0, 0, 500)
+      // },
       contentScroll(position) {
         //返回顶部图标 是否显示
-        if (-position.y > 1000) {
-          this.isShow = true;
-        } else {
-          this.isShow = false;
-        }
-
+        // if (-position.y > 1000) {
+        //   this.isShow = true;
+        // } else {
+        //   this.isShow = false;
+        // }
+        this.isshow(position)
 
         //tabcontrol 吸顶
         this.isTabFixed = (-position.y) > this.tabOffsetTop
